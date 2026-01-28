@@ -23,4 +23,5 @@ end
 
 group :development do
   gem "listen", "~> 3.2"
+  gem 'annotate'
 end

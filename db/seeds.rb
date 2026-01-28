@@ -1,62 +1,56 @@
-require 'faker'
+# frozen_string_literal: true
 
-# Clear existing data
+require "faker"
+Faker::UniqueGenerator.clear
+
+
 puts "Clearing existing data..."
 
 ArtistRelease.destroy_all
-Album.destroy_all
 Release.destroy_all
+Album.destroy_all
 Artist.destroy_all
 
-# Create 20 artists with unique names
 puts "Creating artists..."
-artists = []
-20.times do
-  artists << Artist.create!(
-    name: Faker::Music.unique.band
-  )
-end
+artists = Array.new(20) { Artist.create!(name: Faker::Music.unique.band) }
 
-# Create releases (mix of past and future)
-puts "Creating releases..."
+puts "Creating albums and releases..."
 releases = []
-50.times do |i|
-  releases << Release.create!(
-    name: Faker::Music.album,
-    # First 25 releases are in the past, last 25 are in the future
-    released_at: if i < 25
-                   Faker::Time.between(from: 5.years.ago, to: Time.now)  # Past releases
-                 else
-                   Faker::Time.between(from: Time.now, to: 2.years.from_now)  # Future releases
-                 end
-  )
-end
 
-# For each release, create one album and associate artists
-puts "Creating albums and associating artists..."
-releases.each do |release|
-  # Pick a random artist for the album
+50.times do |i|
   primary_artist = artists.sample
 
-  # Create the album for this release
-  Album.create!(
-    name: release.name,
+  album = Album.create!(
+    name: Faker::Music.unique.album,
     artist: primary_artist,
-    release: release,
     duration_in_minutes: rand(30..90)
   )
 
-  # Associate the primary artist with the release
-  release.artists << primary_artist
+  released_at =
+    if i < 25
+      Faker::Date.between(from: 5.years.ago.to_date, to: Date.today)
+    else
+      Faker::Date.between(from: Date.today, to: 2.years.from_now.to_date)
+    end
 
-  # 30% chance of adding a featured artist (collaboration)
-  if rand < 0.3 && artists.length > 1
-    featured_artist = artists.reject { |a| a.id == primary_artist.id }.sample
-    release.artists << featured_artist unless release.artists.include?(featured_artist)
-  end
+  release = Release.create!(
+    name: Faker::Music.album,
+    released_at: released_at,
+    album: album
+  )
+
+  releases << release
+
+  ArtistRelease.create!(artist: primary_artist, release: release)
+
+  next unless rand < 0.3
+
+  featured_artist = (artists - [primary_artist]).sample
+  ArtistRelease.create!(artist: featured_artist, release: release) if featured_artist
 end
 
 puts "\nSeed completed successfully!"
 puts "Created #{Artist.count} artists"
-puts "Created #{Release.count} releases"
 puts "Created #{Album.count} albums"
+puts "Created #{Release.count} releases"
+puts "Created #{ArtistRelease.count} artist_releases"
