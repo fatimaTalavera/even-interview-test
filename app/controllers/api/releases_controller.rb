@@ -1,6 +1,6 @@
 class Api::ReleasesController < ApplicationController
   def index
-    # TODO:
+    render json: { data: [] }
   end
 
   def create
