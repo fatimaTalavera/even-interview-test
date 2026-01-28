@@ -8,17 +8,14 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  artist_id           :bigint
-#  release_id          :bigint
 #
 # Indexes
 #
-#  index_albums_on_artist_id   (artist_id)
-#  index_albums_on_release_id  (release_id)
+#  index_albums_on_artist_id  (artist_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (artist_id => artists.id)
-#  fk_rails_...  (release_id => releases.id)
 #
 RSpec.describe Album do
 

@@ -8,22 +8,18 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  artist_id           :bigint
-#  release_id          :bigint
 #
 # Indexes
 #
-#  index_albums_on_artist_id   (artist_id)
-#  index_albums_on_release_id  (release_id)
+#  index_albums_on_artist_id  (artist_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (artist_id => artists.id)
-#  fk_rails_...  (release_id => releases.id)
 #
 class Album < ApplicationRecord
-  belongs_to :release
   belongs_to :artist
-  has_many :releases
+  has_many :releases, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :duration_in_minutes, presence: true, numericality: { greater_than: 0 }

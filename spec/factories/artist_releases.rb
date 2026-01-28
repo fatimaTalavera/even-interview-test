@@ -10,8 +10,9 @@
 #
 # Indexes
 #
-#  index_artist_releases_on_artist_id   (artist_id)
-#  index_artist_releases_on_release_id  (release_id)
+#  index_artist_releases_on_artist_id                 (artist_id)
+#  index_artist_releases_on_artist_id_and_release_id  (artist_id,release_id) UNIQUE
+#  index_artist_releases_on_release_id                (release_id)
 #
 # Foreign Keys
 #

@@ -7,6 +7,15 @@
 #  released_at :datetime         not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  album_id    :bigint           not null
+#
+# Indexes
+#
+#  index_releases_on_album_id  (album_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (album_id => albums.id)
 #
 FactoryBot.define do
   factory :release do
