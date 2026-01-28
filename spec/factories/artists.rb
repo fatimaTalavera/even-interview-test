@@ -9,6 +9,6 @@
 #
 FactoryBot.define do
   factory :artist do
-    name { "The Beatles" }
+    sequence(:name) { |n| "The Beatles #{n}" }
   end
 end

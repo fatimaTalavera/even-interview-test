@@ -19,6 +19,7 @@
 #
 FactoryBot.define do
   factory :release do
+    album { create(:album) }
     name { "Abbey Road" }
     released_at { Time.zone.now }
   end
